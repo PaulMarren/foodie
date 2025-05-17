@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Views Part 1</title>
+</head>
+
+<body>
+    <h1>Recipe list</h1>
+    {% for post in object_list %}
+    <h2>{{post.title}}</h2>
+    <p>{{post.description}}</p>
+    <p>Prep time: {{post.prep_time}} minutes</p>
+    <p>Cook time: {{post.cook_time}} minutes</p>
+    <p>Total time: {{post.total_time}} minutes</p>
+    <!-- Equipment list-->
+    <ul>
+        {% for equipment in post.equipment.all %}
+        <li>{{ equipment.name }}</li>
+        {% endfor %}
+    </ul>
+    <!-- Ingredients list-->
+    <ul>
+        {% for ingredient in post.ingredients.all %}
+        <li>{{ ingredient.name }}</li>
+        {% endfor %}
+    </ul>
+    <!-- Instructions list-->
+    <ol>
+        {% for instruction in post.instructions.all %}
+        <li>{{ instruction.step_number }}. {{ instruction.step }}</li>
+        {% endfor %}
+    </ol>
+    
+    <p>Created at: {{post.created_at}}</p>
+    <p>Updated at: {{post.updated_at}}</p>
+    <p>Author: {{post.author}}</p>
+    {% endfor %}
+</body>
+
+</html>
