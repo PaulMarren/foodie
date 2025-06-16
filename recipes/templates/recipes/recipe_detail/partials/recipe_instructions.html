@@ -1,0 +1,7 @@
+<h3 class="mt-4">Instructions</h3>
+<div class="border-bottom mb-4"></div>
+<ol class="list-group list-group-numbered">
+    {% for instruction in recipe.instructions.all %}
+    <li class="list-group-item">{{ instruction.content }}</li>
+    {% endfor %}
+</ol>

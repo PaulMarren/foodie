@@ -1,0 +1,19 @@
+<div class="card mb-4">
+    <img src="{{ recipe.featured_image.url }}" class="card-img-top" alt="{{ recipe.title }}">
+    <div class="card-body">
+        <h1 class="card-title">{{ recipe.title }}</h1>
+        <div class="recipe-meta mb-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <p><i class="fas fa-clock"></i> Prep: {{ recipe.prep_time }} mins</p>
+                </div>
+                <div class="col-md-4">
+                    <p><i class="fas fa-fire"></i> Cook: {{ recipe.cook_time }} mins</p>
+                </div>
+                <div class="col-md-4">
+                    <p><i class="fas fa-stopwatch"></i> Total: {{ recipe.total_time }} mins</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

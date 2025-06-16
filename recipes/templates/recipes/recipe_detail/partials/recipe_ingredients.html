@@ -1,0 +1,7 @@
+<h3 class="mt-4">Ingredients</h3>
+<div class="border-bottom mb-4"></div>
+<ul class="list-group list-group-flush">
+    {% for ingredient in recipe.ingredients.all %}
+    <li class="list-group-item">{{ ingredient.quantity }} {{ ingredient.name }}</li>
+    {% endfor %}
+</ul>
