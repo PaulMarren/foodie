@@ -23,6 +23,7 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'description')
     search_fields = ('name', 'description')    
 
+
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     inlines = [EquipmentInline, IngredientInline, InstructionInline]
