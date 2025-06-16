@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <!-- Left Column - Recipe Details -->
+        <div class="col-md-8">
+            
+
+            <div class="recipe-content">
+                <h2>Share a New Recipe</h2>
+
+                <form method="POST" enctype="multipart/form-data" id="recipe-form">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+
+    
+                    {% include "recipes/recipe_form/partials/formset_block.html" with formset=equipment_formset prefix="equipment" title="Equipment" %}
+                    {% include "recipes/recipe_form/partials/formset_block.html" with formset=ingredient_formset prefix="ingredient" title="Ingredients" %}
+                    {% include "recipes/recipe_form/partials/formset_block.html" with formset=instruction_formset prefix="instruction" title="Instructions" %}
+  
+                    <!-- Submit -->
+                    <button type="submit" class="btn btn-outline-secondary mb-4">Submit Recipe</button>
+                </form>
+
+                
+
+                {% include "recipes/recipe_form/partials/empty_formsets.html" %}
+
+            </div>
+
+        </div>
+
+        <!-- Right Column - Users Profile -->
+        <div class="col-md-4">
+            {% include "recipes/recipe_form/partials/user_card.html" %}
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/formsets.js' %}"></script>
+{% endblock %}
