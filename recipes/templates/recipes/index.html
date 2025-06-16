@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Category header -->
+        <div class="col-12">
+            {% if current_category %}
+            <div class="row align-items-center mb-4">
+                {% with random_recipe=recipe_list|random %}
+                {% if random_recipe.featured_image %}
+                <div class="col-md-2">
+                    <img class="img-fluid rounded" src="{{ random_recipe.featured_image.url }}"
+                        alt="{{ random_recipe.title }}" style="max-height: 150px;">
+                </div>
+                <div class="col-md-10">
+                    {% else %}
+                    <div class="col-12">
+                        {% endif %}
+                        {% endwith %}
+                        <h1>{{ current_category.name }} Recipes</h1>
+                        <p>{{ current_category.description }}</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Recipe Entries Column -->
+            <div class="col-12 mt-3 left">
+                <div class="row">
+                    {% for recipe in recipe_list %}
+                    <div class="col-md-4 mb-4">
+                        <!-- Added mb-4 for consistent bottom margin -->
+                        <div class="card h-100">
+                            <!-- Added h-100 to ensure full height -->
+                            <div class="card-body d-flex flex-column">
+                                <!-- Added flex classes -->
+                                <div class="image-container mb-3">
+                                    <!-- Added mb-3 for spacing -->
+                                    <img class="card-img-top" src="{{ recipe.featured_image.url }}"
+                                        alt="{{ recipe.title }}">
+                                </div>
+                                <div class="content-wrapper flex-grow-1">
+                                    <!-- New wrapper div -->
+                                    <a href="{% url 'recipe_detail' recipe.slug %}" class="recipe-link">
+                                        <h2 class="card-title">{{ recipe.title }}</h2>
+                                    </a>
+                                    <p class="card-text">{{ recipe.description|truncatewords:20 }}</p>
+                                    
+                                </div>
+                                <p><i class="fas fa-stopwatch"></i> {{ recipe.total_time }} mins</p>
+
+                            </div>
+                        </div>
+                    </div>
+                    {% if forloop.counter|divisibleby:3 %}
+                </div>
+                <div class="row">
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        {% if is_paginated %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li><a href="?page={{ page_obj.previous_page_number }}" class="page-link">&laquo; PREV</a></li>
+                {% endif %}
+                {% if page_obj.has_next %}
+                <li><a href="?page={{ page_obj.next_page_number }}" class="page-link">NEXT &raquo;</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+    {% endblock %}
