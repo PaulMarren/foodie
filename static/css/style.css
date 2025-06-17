@@ -98,6 +98,12 @@ body {
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
 }
 
+.auth-card.recipe-card {
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+}
+
 .auth-card h3 {
     text-align: center;
     margin-bottom: 1.5rem;
@@ -199,6 +205,11 @@ body {
     text-transform: uppercase;
 }
 
+.recipe-card {
+    max-width: 800px;
+    width: 100%;
+}
+
 .recipe-link {
     text-decoration: none;
     color: #445261;
@@ -218,6 +229,13 @@ body {
     margin-left: 5%;
     color: lightgray;
 }
+
+.btn {
+    font-size: 1rem;
+    padding: 0.6rem;
+    border-radius: 0.375rem;
+}
+
 
 .btn-signup,
 .btn-edit {
@@ -258,7 +276,21 @@ body {
 
 .formset-form {
     transition: all 0.3s ease;
+    animation: fadeSlideIn 0.4s ease-in;
+    background-color: #fefefe;
 }
+
+@keyframes fadeSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 
 .formset-form.hidden {
     display: none;
@@ -272,4 +304,35 @@ body {
 
 .social-links i:hover {
     color: #E84610;
+}
+
+.btn-outline-danger.remove-form {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.formset-block {
+    border-top: 2px solid #dee2e6;
+    padding-top: 1.5rem;
+    margin-top: 2rem;
+}
+
+
+.formset-block .btn-outline-secondary {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.auth-card .btn,
+.formset-block .btn {
+    font-size: 1rem;
+    padding: 0.6rem;
+    border-radius: 0.375rem;
+}
+
+.auth-card input:focus,
+.auth-card textarea:focus,
+.auth-card select:focus {
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    border-color: #28a745;
 }

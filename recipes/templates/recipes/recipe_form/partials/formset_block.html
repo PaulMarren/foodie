@@ -1,27 +1,31 @@
 {% load crispy_forms_tags %}
 <div class="formset-block mb-4" id="{{ prefix }}-section">
+    <h5 class="mb-3">
+        <i class="bi bi-clipboard-plus"></i> {{ title }}
+    </h5>
     {{ formset.management_form }}
-    
+
     <!-- Add this error display div -->
     <div id="{{ prefix }}-error" class="formset-error mb-3">
         {% if formset.non_form_errors %}
-            <div class="alert alert-danger">
-                {% for error in formset.non_form_errors %}
-                    {{ error }}
-                {% endfor %}
-            </div>
+        <div class="alert alert-danger">
+            {% for error in formset.non_form_errors %}
+            {{ error }}
+            {% endfor %}
+        </div>
         {% endif %}
     </div>
-    
+
     <div id="{{ prefix }}-formset" class="formset-forms">
         {% for form in formset %}
-            <div class="formset-form mb-3 border p-3 rounded">
-                {{ form|crispy }}
-                <button type="button" class="btn btn-outline-danger remove-form">Remove</button>
-            </div>
+        <div class="formset-form mb-3 border p-3 rounded">
+            {{ form|crispy }}
+            <button type="button" class="btn btn-outline-danger remove-form w-100 mt-2">Remove</button>
+
+        </div>
         {% endfor %}
     </div>
-    
+
     <button type="button" class="btn btn-outline-secondary mt-2" onclick="addForm('{{ prefix }}')">
         Add More {{ title }}
     </button>

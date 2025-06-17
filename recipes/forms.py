@@ -19,24 +19,23 @@ class RecipeForm(forms.ModelForm):
             'prep_time': forms.NumberInput(attrs={'min': 0}),
             'cook_time': forms.NumberInput(attrs={'min': 0}),
             'total_time': forms.NumberInput(attrs={'min': 0}),
-            'categories': forms.CheckboxSelectMultiple(),  
             'featured_image': forms.ClearableFileInput(attrs={'required': 'required'}),
+            'categories': forms.CheckboxSelectMultiple(),  
         }
 
     def clean(self):
         cleaned_data = super().clean()
+    
+        categories = cleaned_data.get('categories')
+        if not categories:
+            self.add_error('categories', "Please select at least one category.")
+    
         featured_image = cleaned_data.get('featured_image')
-        
         if not featured_image:
-            raise ValidationError("A featured image is required.")
-        
+            self.add_error('featured_image', "A featured image is required.")
+    
         return cleaned_data
 
-    def clean_categories(self):
-        categories = self.cleaned_data.get('categories')
-        if not categories:
-            raise ValidationError("Please select at least one category.")
-        return categories    
 
 
 class EquipmentForm(forms.ModelForm):

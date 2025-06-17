@@ -7,25 +7,30 @@
     <div class="row">
         <!-- Left Column - Recipe Details -->
         <div class="col-md-8">
-            
 
-            <div class="recipe-content">
+            <div class="auth-card recipe-card">
                 <h2>Share a New Recipe</h2>
 
                 <form method="POST" enctype="multipart/form-data" id="recipe-form">
                     {% csrf_token %}
-                    {{ form|crispy }}
+                    {{ form.title|as_crispy_field }}
+                    {{ form.description|as_crispy_field }}
+                    {{ form.featured_image|as_crispy_field }}
+                    {{ form.prep_time|as_crispy_field }}
+                    {{ form.cook_time|as_crispy_field }}
+                    {{ form.total_time|as_crispy_field }}
+                    {{ form.categories|as_crispy_field }}
 
-    
+
                     {% include "recipes/recipe_form/partials/formset_block.html" with formset=equipment_formset prefix="equipment" title="Equipment" %}
                     {% include "recipes/recipe_form/partials/formset_block.html" with formset=ingredient_formset prefix="ingredient" title="Ingredients" %}
                     {% include "recipes/recipe_form/partials/formset_block.html" with formset=instruction_formset prefix="instruction" title="Instructions" %}
-  
+
                     <!-- Submit -->
-                    <button type="submit" class="btn btn-outline-secondary mb-4">Submit Recipe</button>
+                    <button type="submit" class="btn btn-outline-success mb-4 mt-4">Submit Recipe</button>
                 </form>
 
-                
+
 
                 {% include "recipes/recipe_form/partials/empty_formsets.html" %}
 
