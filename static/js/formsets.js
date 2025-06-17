@@ -47,6 +47,12 @@ function addForm(prefix) {
     formset.insertAdjacentHTML('beforeend', newForm);
     totalForms.value = formNum + 1;
     
+    // Update step numbers if prefix is instruction
+    if (prefix === 'instruction') {
+        console.log("Updating step numbers");
+        updateStepNumbers();
+    }
+
     // Scroll to new form
     const newFormElement = formset.lastElementChild;
     newFormElement.scrollIntoView({
@@ -96,6 +102,7 @@ document.addEventListener('click', function(e) {
                 form.style.display = 'none';
             } else {
                 form.remove();
+                updateStepNumbers();
                 // Update the TOTAL_FORMS count
                 const prefix = form.closest('[id$="-formset"]').id.replace('-formset', '');
                 const totalForms = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
@@ -106,3 +113,14 @@ document.addEventListener('click', function(e) {
         }
     }
 });
+
+
+function updateStepNumbers() {
+    const instructionForms = document.querySelectorAll('#id_instruction-TOTAL_FORMS').length > 0 ? 
+        document.querySelectorAll('[id^="id_instruction-"][id$="-step_number"]') : 
+        document.querySelectorAll('[id^="id_instruction-"][id$="-step_number"]');
+    
+    instructionForms.forEach((input, index) => {
+        input.value = index + 1;
+    });
+}

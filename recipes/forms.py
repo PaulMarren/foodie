@@ -8,6 +8,7 @@ class RecipeForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['title'].required = True
         self.fields['description'].required = True
+        self.fields['total_time'].widget.attrs['readonly'] = True
         self.fields['featured_image'].required = True
         self.fields['categories'].required = True
 
@@ -25,6 +26,11 @@ class RecipeForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
+
+        # Calculate total time
+        prep_time = cleaned_data.get('prep_time', 0)
+        cook_time = cleaned_data.get('cook_time', 0)
+        cleaned_data['total_time'] = prep_time + cook_time
     
         categories = cleaned_data.get('categories')
         if not categories:

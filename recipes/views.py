@@ -13,6 +13,7 @@ from .forms import (RecipeForm, EquipmentForm,
                     IngredientForm, InstructionForm, CommentForm)
 
 
+
 def home(request, category_slug=None):
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
@@ -81,17 +82,46 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
     
     def get_formset_classes(self):
         return {
-            'equipment_formset': inlineformset_factory(Recipe, Equipment, form=EquipmentForm, extra=0, can_delete=False, min_num=1, validate_min=True),
-            'ingredient_formset': inlineformset_factory(Recipe, Ingredient, form=IngredientForm, extra=0, can_delete=False, min_num=1, validate_min=True),
-            'instruction_formset': inlineformset_factory(Recipe, Instruction, form=InstructionForm, extra=0, can_delete=False, min_num=1, validate_min=True),
+            'equipment_formset': inlineformset_factory(
+                Recipe, Equipment, 
+                form=EquipmentForm, 
+                extra=0, 
+                can_delete=False, 
+                min_num=1, 
+                validate_min=True
+            ),
+            'ingredient_formset': inlineformset_factory(
+                Recipe, Ingredient, 
+                form=IngredientForm, 
+                extra=0, 
+                can_delete=False, 
+                min_num=1, 
+                validate_min=True
+            ),
+            'instruction_formset': inlineformset_factory(
+                Recipe, Instruction, 
+                form=InstructionForm, 
+                extra=0, 
+                can_delete=False, 
+                min_num=1, 
+                validate_min=True
+            ),
         }
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         formsets = self.get_formset_classes()
+
         for name, formset in formsets.items():
             context[name] = formset(prefix=name.split('_')[0])
+
+            # For instruction formset, set initial step numbers
+            if name == 'instruction_formset':
+                for i, form in enumerate(context[name]):
+                    form.initial['step_number'] = i + 1
+                    
         return context
+
     
     def form_invalid(self, form, equipment_formset=None, ingredient_formset=None, instruction_formset=None):
         # This method will handle both form and formset errors
