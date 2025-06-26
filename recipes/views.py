@@ -13,7 +13,6 @@ from .forms import (RecipeForm, EquipmentForm,
                     IngredientForm, InstructionForm, CommentForm)
 
 
-
 def home(request, category_slug=None):
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
@@ -45,7 +44,6 @@ class RecipeList(generic.ListView):
 
 def recipe_detail(request, slug):
     recipe = get_object_or_404(Recipe, slug=slug)
-
     comments = recipe.comments.filter(
         Q(approved=True) | 
         Q(approved=False, author=request.user.id if request.user.is_authenticated else None)
@@ -122,7 +120,6 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
                     
         return context
 
-    
     def form_invalid(self, form, equipment_formset=None, ingredient_formset=None, instruction_formset=None):
         # This method will handle both form and formset errors
         context = self.get_context_data()
