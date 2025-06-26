@@ -3,67 +3,80 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+<!-- Main Container for Recipe Creation Form -->
 <div class="container mt-5">
     <div class="row">
-        <!-- Left Column - Recipe Details -->
+        <!-- Left Column - Recipe Form Section -->
         <div class="col-md-8">
-
+            <!-- Recipe Card Container -->
             <div class="auth-card recipe-card">
                 <h2>Share a New Recipe</h2>
 
+                <!-- Recipe Form -->
                 <form method="POST" enctype="multipart/form-data" id="recipe-form">
                     {% csrf_token %}
+                    
+                    <!-- Basic Recipe Information Fields -->
                     {{ form.title|as_crispy_field }}
                     {{ form.description|as_crispy_field }}
                     {{ form.featured_image|as_crispy_field }}
+                    
+                    <!-- Time-related Fields -->
                     {{ form.prep_time|as_crispy_field }}
                     {{ form.cook_time|as_crispy_field }}
                     {{ form.total_time|as_crispy_field }}
+                    
+                    <!-- Recipe Categories -->
                     {{ form.categories|as_crispy_field }}
 
-
+                    <!-- Dynamic Formset Sections -->
                     {% include "recipes/recipe_form/partials/formset_block.html" with formset=equipment_formset prefix="equipment" title="Equipment" %}
                     {% include "recipes/recipe_form/partials/formset_block.html" with formset=ingredient_formset prefix="ingredient" title="Ingredients" %}
                     {% include "recipes/recipe_form/partials/formset_block.html" with formset=instruction_formset prefix="instruction" title="Instructions" %}
 
-                    <!-- Submit -->
+                    <!-- Form Submission Button -->
                     <button type="submit" class="btn btn-outline-success mb-4 mt-4">Submit Recipe</button>
                 </form>
 
+                <!-- Empty Formsets for JavaScript to Clone -->
                 {% include "recipes/recipe_form/partials/empty_formsets.html" %}
-
             </div>
-
         </div>
 
-        <!-- Right Column - Users Profile -->
+        <!-- Right Column - User Profile Section -->
         <div class="col-md-4">
             {% include "recipes/recipe_form/partials/user_card.html" %}
         </div>
-
     </div>
 </div>
 
 {% endblock %}
 
 {% block scripts %}
+<!-- Formset Management JavaScript -->
 <script src="{% static 'js/formsets.js' %}"></script>
-<script>
-    function calculateTotalTime() {
-    const prepTime = parseFloat(document.getElementById('id_prep_time').value) || 0;
-    const cookTime = parseFloat(document.getElementById('id_cook_time').value) || 0;
-    const totalTime = prepTime + cookTime;
-    document.getElementById('id_total_time').value = totalTime;
-}
 
-document.addEventListener('DOMContentLoaded', function() {
-    const prepTimeInput = document.getElementById('id_prep_time');
-    const cookTimeInput = document.getElementById('id_cook_time');
-    
-    if (prepTimeInput && cookTimeInput) {
-        prepTimeInput.addEventListener('change', calculateTotalTime);
-        cookTimeInput.addEventListener('change', calculateTotalTime);
+<!-- Total Time Calculation Script -->
+<script>
+    /**
+     * Calculates total time by adding prep time and cook time
+     */
+    function calculateTotalTime() {
+        const prepTime = parseFloat(document.getElementById('id_prep_time').value) || 0;
+        const cookTime = parseFloat(document.getElementById('id_cook_time').value) || 0;
+        const totalTime = prepTime + cookTime;
+        document.getElementById('id_total_time').value = totalTime;
     }
-});
+
+    // Add event listeners when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        const prepTimeInput = document.getElementById('id_prep_time');
+        const cookTimeInput = document.getElementById('id_cook_time');
+        
+        if (prepTimeInput && cookTimeInput) {
+            prepTimeInput.addEventListener('change', calculateTotalTime);
+            cookTimeInput.addEventListener('change', calculateTotalTime);
+        }
+    });
 </script>
 {% endblock %}

@@ -1,20 +1,36 @@
 {% load crispy_forms_tags %}
 
+<!-- 
+    Empty Formsets Template
+    Hidden templates used by JavaScript to clone when adding new forms dynamically
+-->
+
+<!-- Hidden Empty Equipment Form (used for adding new equipment) -->
 <div id="empty-form-equipment" style="display: none;">
     <div class="formset-form mb-3 border p-3 rounded">
+        <!-- Crispy-form rendered empty equipment form -->
         {{ equipment_formset.empty_form|crispy }}
+        <!-- Remove button for this form instance -->
         <button type="button" class="btn btn-outline-danger remove-form">Remove</button>
     </div>
 </div>
+
+<!-- Hidden Empty Ingredient Form (used for adding new ingredients) -->
 <div id="empty-form-ingredient" style="display: none;">
     <div class="formset-form mb-3 border p-3 rounded">
+        <!-- Crispy-form rendered empty ingredient form -->
         {{ ingredient_formset.empty_form|crispy }}
+        <!-- Remove button for this form instance -->
         <button type="button" class="btn btn-outline-danger remove-form">Remove</button>
     </div>
 </div>
+
+<!-- Hidden Empty Instruction Form (used for adding new instructions) -->
 <div id="empty-form-instruction" style="display: none;">
     <div class="formset-form mb-3 border p-3 rounded">
+        <!-- Crispy-form rendered empty instruction form -->
         {{ instruction_formset.empty_form|crispy }}
+        <!-- Remove button for this form instance -->
         <button type="button" class="btn btn-outline-danger remove-form">Remove</button>
     </div>
 </div>

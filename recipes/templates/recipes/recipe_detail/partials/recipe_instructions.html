@@ -1,7 +1,9 @@
 <h3 class="mt-4">Instructions</h3>
 <div class="border-bottom mb-4"></div>
 <ol class="list-group list-group-numbered">
+    <!-- Loop through each instruction -->
     {% for instruction in recipe.instructions.all %}
+    <!-- Display each instruction content -->
     <li class="list-group-item">{{ instruction.content }}</li>
     {% endfor %}
 </ol>

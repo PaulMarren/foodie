@@ -5,23 +5,33 @@
 
 <div class="card mt-4">
     <div class="card-body">
+        
+        <!-- Section Heading -->
         <h2 class="card-title">Comments</h2>
         <div class="border-bottom mb-4"></div>
 
+        <!-- Comments Loop - Iterates through each comment -->
         {% for comment in comments %}
+        <!-- Individual Comment Card -->
         <div class="card mb-3">
             <div class="card-body">
+                <!-- Comment Header (Author + Timestamp) -->
                 <div class="d-flex justify-content-between">
                     <h5 class="card-title">
+                        <!-- Author Profile Image -->
                         <img src="{% get_profile_image comment.author.profile %}"
                             class="rounded-circle me-2" width="30" height="30"
                             alt="{{ comment.author.username }}">
+                        <!-- Author Username -->
                         {{ comment.author.username }}
                     </h5>
+                    <!-- Comment Timestamp -->
                     <small class="text-muted">{{ comment.created_on|date:"F d, Y H:i" }}</small>
                 </div>
 
+                <!-- Comment Approval Status (Only shows if not approved) -->
                 {% if not comment.approved %}
+                    <!-- Different message for comment author vs others -->
                     {% if user == comment.author %}
                     <div class="alert alert-warning p-2 my-2">
                         <i class="fas fa-clock me-1"></i> Your comment is awaiting approval
@@ -33,65 +43,75 @@
                     {% endif %}
                 {% endif %}
                 
+                <!-- Comment Body Text -->
                 <p class="card-text mt-3" id="comment{{ comment.id }}">{{ comment.body }}</p>
 
+                <!-- Comment Actions (Only shown to comment author) -->
                 {% if user == comment.author %}
                 <div class="btn-group">
+                    <!-- Delete Button with data attributes for JS handling -->
                     <button class="btn btn-delete" data-recipe_slug="{{ recipe.slug }}" data-comment_id="{{ comment.id }}">Delete</button>
+                    <!-- Edit Button with data attributes for JS handling -->
                     <button class="btn btn-edit" data-recipe_slug="{{ recipe.slug }}" data-comment_id="{{ comment.id }}">Edit</button>
                 </div>
-
                 {% endif %}
             </div>
         </div>
+        <!-- Empty State (Shows when no comments exist) -->
         {% empty %}
         <p>No comments yet. Be the first to comment!</p>
         {% endfor %}
 
+        <!-- Comment Form Section (Only shown to authenticated users) -->
         {% if user.is_authenticated %}
         <div class="mt-5">
             <h3>Add a Comment</h3>
             <div class="border-bottom mb-4"></div>
+            <!-- Comment Submission Form -->
             <form method="post" id="commentForm">
                 {% csrf_token %}
+                <!-- Django Crispy Form Rendering -->
                 {{ comment_form|crispy }}
+                <!-- Submit Button -->
                 <button type="submit" id="submitButton" class="btn btn-outline-success mt-3">Submit Comment</button>
             </form>
         </div>
         {% else %}
+        <!-- Message for unauthenticated users -->
         <p><a href="{% url 'account_login' %}">Log in</a> to leave a comment.</p>
         {% endif %}
-
-    
     </div>
 </div>
-<!-- Delete confirmation modal -->
+
+<!-- Delete Confirmation Modal (Hidden by default) -->
 <div class="modal fade" id="deleteModal" tabindex="-1"
   aria-labelledby="deleteModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
+      <!-- Modal Header -->
       <div class="modal-header">
-        <h5 class="modal-title"
-          id="deleteModalLabel">Delete comment?</h5>
-        <button type="button" class="btn-close"
-          data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title" id="deleteModalLabel">Delete comment?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      <!-- Modal Body with Warning Message -->
       <div class="modal-body">
         Are you sure you want to delete your comment?
         This action cannot be undone.
       </div>
+      <!-- Modal Footer with Action Buttons -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary"
-          data-bs-dismiss="modal">Close</button>
-        <a id="deleteConfirm" href="#" class="btn
-          btn-danger">Delete</a>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <!-- Actual Delete Confirmation Link (JS will populate href) -->
+        <a id="deleteConfirm" href="#" class="btn btn-danger">Delete</a>
       </div>
     </div>
   </div>
 </div>
 
-
+<!-- JavaScript Includes -->
 {% block scripts %}
+<!-- Bootstrap JS Bundle (required for modal functionality) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Custom Comments JavaScript (handles delete/edit functionality) -->
 <script src="{% static 'js/comments.js' %}"></script>
 {% endblock %}

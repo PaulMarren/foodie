@@ -4,17 +4,18 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+
 <div class="container mt-5">
     <div class="row">
         <!-- Left Column - Recipe Details -->
         <div class="col-md-8">
         
+            <!-- Recipe Content -->
             <div class="recipe-content">
                 {% include "recipes/recipe_detail/partials/recipe_header.html" %}
                 {% include "recipes/recipe_detail/partials/recipe_description.html" %}
                 {% include "recipes/recipe_detail/partials/recipe_ingredients.html" %}
                 {% include "recipes/recipe_detail/partials/recipe_instructions.html" %}
-                
                 {% include "recipes/recipe_detail/partials/comments_section.html" %}
             </div>
             
@@ -28,6 +29,4 @@
     </div>
 </div>
 
-
 {% endblock %}
-

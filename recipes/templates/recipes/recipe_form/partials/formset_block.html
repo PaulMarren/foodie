@@ -1,11 +1,19 @@
 {% load crispy_forms_tags %}
+<!-- 
+    Formset Block Template
+    Reusable component for rendering dynamic formset sections (equipment, ingredients, instructions)
+-->
+
 <div class="formset-block mb-4" id="{{ prefix }}-section">
+    <!-- Section Header with Icon -->
     <h5 class="mb-3">
         <i class="bi bi-clipboard-plus"></i> {{ title }}
     </h5>
+    
+    <!-- Django Formset Management Form (hidden fields for formset management) -->
     {{ formset.management_form }}
 
-    <!-- Add this error display div -->
+    <!-- Error Display Area for Formset-wide Errors -->
     <div id="{{ prefix }}-error" class="formset-error mb-3">
         {% if formset.non_form_errors %}
         <div class="alert alert-danger">
@@ -16,16 +24,21 @@
         {% endif %}
     </div>
 
+    <!-- Container for Individual Formset Forms -->
     <div id="{{ prefix }}-formset" class="formset-forms">
         {% for form in formset %}
+        <!-- Individual Form Wrapper -->
         <div class="formset-form mb-3 border p-3 rounded">
+            <!-- Render the form using crispy forms -->
             {{ form|crispy }}
+            
+            <!-- Remove Button for this specific form instance -->
             <button type="button" class="btn btn-outline-danger remove-form w-100 mt-2">Remove</button>
-
         </div>
         {% endfor %}
     </div>
 
+    <!-- 'Add More' Button - Triggers JavaScript to add new forms -->
     <button type="button" class="btn btn-outline-secondary mt-2" onclick="addForm('{{ prefix }}')">
         Add More {{ title }}
     </button>

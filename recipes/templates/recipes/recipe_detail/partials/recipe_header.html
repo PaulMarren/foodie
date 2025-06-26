@@ -1,17 +1,43 @@
 <div class="card mb-4">
-    <img src="{{ recipe.featured_image.url }}" class="card-img-top" alt="{{ recipe.title }}">
+    <!-- Recipe Image -->
+    <img src="{{ recipe.featured_image.url }}" 
+         class="card-img-top" 
+         alt="{{ recipe.title }}"
+         aria-label="Featured image for {{ recipe.title }}">
+    
+    <!-- Recipe Content Section -->
     <div class="card-body">
+        <!-- Recipe Title -->
         <h1 class="card-title">{{ recipe.title }}</h1>
+        
+        <!-- Recipe Times Section -->
         <div class="recipe-meta mb-4">
             <div class="row">
+                <!-- Preparation Time -->
                 <div class="col-md-4">
-                    <p><i class="fas fa-clock"></i> Prep: {{ recipe.prep_time }} mins</p>
+                    <p>
+                        <i class="fas fa-clock" aria-hidden="true"></i> 
+                        Prep: {{ recipe.prep_time }} mins
+                        <span class="visually-hidden">Preparation time</span>
+                    </p>
                 </div>
+                
+                <!-- Cooking Time -->
                 <div class="col-md-4">
-                    <p><i class="fas fa-fire"></i> Cook: {{ recipe.cook_time }} mins</p>
+                    <p>
+                        <i class="fas fa-fire" aria-hidden="true"></i> 
+                        Cook: {{ recipe.cook_time }} mins
+                        <span class="visually-hidden">Cooking time</span>
+                    </p>
                 </div>
+                
+                <!-- Total Time -->
                 <div class="col-md-4">
-                    <p><i class="fas fa-stopwatch"></i> Total: {{ recipe.total_time }} mins</p>
+                    <p>
+                        <i class="fas fa-stopwatch" aria-hidden="true"></i> 
+                        Total: {{ recipe.total_time }} mins
+                        <span class="visually-hidden">Total time</span>
+                    </p>
                 </div>
             </div>
         </div>

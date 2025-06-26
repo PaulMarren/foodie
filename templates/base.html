@@ -6,13 +6,15 @@
 {% url 'account_signup' as signup_url %}
 {% url 'account_logout' as logout_url %}
 
-
 <!DOCTYPE html>
 <html class="h-100" lang="en">
 
 <head>
-    <title>foodie</title>
+    <!-- Basic meta tags -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Page title block (can be overridden by child templates) -->
+    <title>{% block title %}{{ title|default:"foodie - Share & Discover Recipes" }}{% endblock %}</title>
 
     <!-- SEO meta tags -->
     <meta name="title" content="foodie - Share & Discover Delicious Recipes">
@@ -23,14 +25,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;700&display=swap" rel="stylesheet">
 
-    <!-- Font Awesome CSS -->
+    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 
-    <!-- Bootstrap Icons CSS -->
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
     <!-- Favicon -->
@@ -41,30 +43,35 @@
 
 <body class="d-flex flex-column h-100 main-bg">
 
-    <!-- Navigation -->
-
+    <!-- Main Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
         <div class="container-fluid">
+            <!-- Brand/logo -->
             <a class="navbar-brand" href="{% url 'home' %}"><span class="brand">foodie</span></a>
+            
+            <!-- Mobile menu toggle button -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
                 aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            
+            <!-- Navigation links -->
             <div class="collapse navbar-collapse" id="navbarText">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <!-- Home link -->
                     <li class="nav-item">
                         <a class="nav-link {% if request.path == home_url %}active{% endif %}" aria-current="page"
                             href="{% url 'home' %}">Home</a>
                     </li>
 
-                    <!-- Categories Dropdown -->
+                    <!-- Categories Dropdown Menu -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             Categories
                         </a>
+                        <!-- Dynamically generated category links -->
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-
                             {% for category in all_categories %}
                             <li>
                                 <a class="dropdown-item" href="{% url 'recipes_by_category' category.slug %}">
@@ -79,47 +86,54 @@
                             {% endfor %}
                         </ul>
                     </li>
+                    
+                    <!-- Create Recipe link -->
                     <li class="nav-item">
                         <a class="nav-link {% if request.path == create_url %}active{% endif %}" aria-current="page"
                             href="{% url 'recipe_create' %}">Share a recipe</a>
                     </li>
                 </ul>
+                
+                <!-- Right-aligned navigation links (authentication related) -->
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-
                     {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.path == logout_url %}active{% endif %}" aria-current="page"
-                            href="{% url 'account_logout' %}">Logout</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.path == profile_url %}active{% endif %}" aria-current="page"
-                            href="{% url 'profile' %}">Profile</a>
-                    </li>
+                        <!-- Logout link (shown when user is logged in) -->
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == logout_url %}active{% endif %}" aria-current="page"
+                                href="{% url 'account_logout' %}">Logout</a>
+                        </li>
+                        <!-- Profile link (shown when user is logged in) -->
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == profile_url %}active{% endif %}" aria-current="page"
+                                href="{% url 'profile' %}">Profile</a>
+                        </li>
                     {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.path == signup_url %}active{% endif %}" aria-current="page"
-                            href="{% url 'account_signup' %}">Register</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.path == login_url %}active{% endif %}" aria-current="page"
-                            href="{% url 'account_login' %}">Login</a>
-                    </li>
+                        <!-- Register link (shown when user is not logged in) -->
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == signup_url %}active{% endif %}" aria-current="page"
+                                href="{% url 'account_signup' %}">Register</a>
+                        </li>
+                        <!-- Login link (shown when user is not logged in) -->
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == login_url %}active{% endif %}" aria-current="page"
+                                href="{% url 'account_login' %}">Login</a>
+                        </li>
                     {% endif %}
                 </ul>
-
             </div>
         </div>
     </nav>
 
+    <!-- Main content area (will be filled by child templates) -->
     <main class="flex-shrink-0 main-bg">
-
         {% block content %}
         <!-- Content Goes here -->
         {% endblock content %}
-
     </main>
 
+    <!-- Footer section -->
     <footer class="footer mt-auto py-3">
+         <!-- Social media links -->
         <p class="social-links text-center">
             <a class="ms-3 text-decoration-none" href="https://www.facebook.com" target="_blank"
                 aria-label="Visit our Facebook page (opens in a new tab)" rel="noopener">
@@ -140,14 +154,15 @@
         </p>
     </footer>
 
+    <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous">
     </script>
 
-
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
+    <!-- Additional scripts block (can be filled by child templates) -->
     {% block scripts %}{% endblock %}
 </body>
-
 </html>

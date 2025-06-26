@@ -2,13 +2,24 @@
 {% load profile_tags %}
 {% load crispy_forms_tags %}
 
+<!-- 
+    User Profile Card Template
+    Displays user profile information in the recipe creation/editing sidebar
+-->
+
 <div class="card author-card mb-4">
     <div class="card-body text-center">
-        <img src="{% get_profile_image user.profile %}" class="rounded-circle mb-3"
-            alt="{{ recipe.author.username }}" style="width: 150px; height: 150px; object-fit: cover;">
+        <!-- Profile Image -->
+        <img src="{% get_profile_image user.profile %}" 
+             class="rounded-circle mb-3"
+             alt="{{ recipe.author.username }}" 
+             style="width: 150px; height: 150px; object-fit: cover;">
+
+        <!-- User Name Display -->
         <h4 class="card-title">{{ user.get_full_name }}</h4>
         <p class="text-muted">@{{ user.username }}</p>
 
+        <!-- Bio Section (Conditional) -->
         {% if profile.bio %}
         <div class="bio-section mt-3">
             <h5>About Me</h5>
@@ -16,12 +27,16 @@
         </div>
         {% endif %}
 
+        <!-- User Statistics Section -->
         <div class="stats mt-4">
             <div class="row">
+                <!-- Recipe Count -->
                 <div class="col-6">
                     <h5>{{ user.recipe_set.count }}</h5>
                     <p class="text-muted small">Recipes</p>
                 </div>
+                
+                <!-- Member Since Date -->
                 <div class="col-6">
                     <h5>{{ user.date_joined|date:"Y" }}</h5>
                     <p class="text-muted small">Member Since</p>

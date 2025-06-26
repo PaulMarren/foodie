@@ -3,23 +3,48 @@
 {% load profile_tags %}
 
 {% block content %}
+<!-- 
+    Profile Page Template
+    Displays and allows editing of user profile information
+-->
+
 <div class="container mt-5">
     <div class="row">
+        <!-- Left Column - Profile Edit Form -->
         <div class="col-md-8">
+            <!-- Page Header -->
             <h2 class="mb-4">Profile Settings</h2>
+            
+            <!-- Profile Edit Form -->
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
+                <!-- User Account Form Fields (username, email, etc.) -->
                 {{ user_form|crispy }}
+                
+                <!-- Profile Details Form Fields (bio, image, etc.) -->
                 {{ profile_form|crispy }}
+                
+                <!-- Form Submission Button -->
                 <button type="submit" class="btn btn-outline-secondary mt-3 mb-4">Update Profile</button>
             </form>
         </div>
+
+        <!-- Right Column - Profile Preview Card -->
         <div class="col-md-4">
+            <!-- Profile Card Container -->
             <div class="card shadow">
-                <img src="{% get_profile_image user.profile %}" class="card-img-top rounded-circle p-3"
-                    alt="Profile image" style="width: 200px; height: 200px; object-fit: cover; margin: 0 auto;">
+                <!-- Profile Image -->
+                <img src="{% get_profile_image user.profile %}" 
+                     class="card-img-top rounded-circle p-3"
+                     alt="Profile image" 
+                     style="width: 200px; height: 200px; object-fit: cover; margin: 0 auto;">
+                
+                <!-- Profile Details -->
                 <div class="card-body text-center">
+                    <!-- User's Full Name -->
                     <h5 class="card-title">{{ user.get_full_name }}</h5>
+                    
+                    <!-- User Bio -->
                     <p class="card-text text-muted">{{ user.profile.bio }}</p>
                 </div>
             </div>

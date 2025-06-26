@@ -1,9 +1,0 @@
-{% if recipe.tips.exists %}
-<h3 class="mt-4">Tips</h3>
-<div class="border-bottom mb-4"></div>
-<div class="alert alert-warning">
-    {% for tip in recipe.tips.all %}
-    <p class="mb-1">• {{ tip.content }}</p>
-    {% endfor %}
-</div>
-{% endif %}
