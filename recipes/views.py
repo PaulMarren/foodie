@@ -37,6 +37,7 @@ def home(request, category_slug=None):
         'current_category': category,
         'all_categories': all_categories,
         'is_paginated': page_obj.has_other_pages(),
+        'title': f'{category.name} Recipes - foodie',
     }
     return render(request, 'recipes/index.html', context)
 
