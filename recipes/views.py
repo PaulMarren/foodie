@@ -14,19 +14,24 @@ from .forms import (RecipeForm, EquipmentForm,
 
 
 def home(request, category_slug=None):
+    """
+    Homepage view displaying recipes, optionally filtered by category.
+    Features pagination and category sidebar.
+    """
+    # Filter recipes by category if category_slug is provided
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
         recipe_list = Recipe.objects.filter(categories=category).order_by('-created_at')
     else:
         category = None
         recipe_list = Recipe.objects.all().order_by('-created_at')
-    
+
     paginator = Paginator(recipe_list, 6)  # Show 6 recipes per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    
-    all_categories = Category.objects.all()
-    
+
+    all_categories = Category.objects.all() # Get all categories for sidebar navigation
+
     context = {
         'recipe_list': page_obj,
         'current_category': category,
@@ -37,18 +42,28 @@ def home(request, category_slug=None):
 
 
 class RecipeList(generic.ListView):
+    """
+    Alternative list view for recipes using Django's generic ListView.
+    Shows all recipes with pagination (6 per page).
+    """
     queryset = Recipe.objects.all()
     template_name = "recipes/index.html"
     paginate_by = 6
 
 
 def recipe_detail(request, slug):
-    recipe = get_object_or_404(Recipe, slug=slug)
+    """
+    Detailed view for a single recipe, including comments and comment form.
+    Handles both displaying the recipe and processing new comments.
+    """
+    recipe = get_object_or_404(Recipe, slug=slug) # Get the recipe or return 404
+    # Get approved comments + unapproved comments by the current user (if authenticated)
     comments = recipe.comments.filter(
         Q(approved=True) | 
         Q(approved=False, author=request.user.id if request.user.is_authenticated else None)
     ).order_by("-created_on")
-    
+
+    # Handle comment submission
     if request.method == 'POST':
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
@@ -74,11 +89,18 @@ def recipe_detail(request, slug):
 
 
 class RecipeCreateView(LoginRequiredMixin, CreateView):
+    """
+    View for creating new recipes with nested formsets for equipment,
+    ingredients, and instructions. Requires login.
+    """
     model = Recipe
     form_class = RecipeForm
     template_name = 'recipes/recipe_form/recipe_form.html'
     
     def get_formset_classes(self):
+        """
+        Returns a dictionary of formset classes used in the recipe creation form.
+        """
         return {
             'equipment_formset': inlineformset_factory(
                 Recipe, Equipment, 
@@ -107,9 +129,13 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
         }
     
     def get_context_data(self, **kwargs):
+        """
+        Adds formsets to the template context and sets initial step numbers for instructions.
+        """
         context = super().get_context_data(**kwargs)
         formsets = self.get_formset_classes()
 
+        # Add each formset to context with appropriate prefix
         for name, formset in formsets.items():
             context[name] = formset(prefix=name.split('_')[0])
 
@@ -121,7 +147,9 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
         return context
 
     def form_invalid(self, form, equipment_formset=None, ingredient_formset=None, instruction_formset=None):
-        # This method will handle both form and formset errors
+        """
+        Handles invalid form submissions, preserving formset data for correction.
+        """
         context = self.get_context_data()
         context['form'] = form
         
@@ -134,6 +162,9 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
         return self.render_to_response(context)
 
     def form_valid(self, form):
+        """
+        Processes valid form submissions, saving the recipe and all related formsets.
+        """
         form.instance.author = self.request.user
         formsets = self.get_formset_classes()
         
@@ -142,6 +173,7 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
         ingredient_formset = formsets['ingredient_formset'](self.request.POST, instance=form.instance, prefix='ingredient')
         instruction_formset = formsets['instruction_formset'](self.request.POST, instance=form.instance, prefix='instruction')
 
+        # Validate all formsets
         if (equipment_formset.is_valid() 
             and ingredient_formset.is_valid() 
                 and instruction_formset.is_valid()):
@@ -168,16 +200,8 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
 
 def comment_edit(request, slug, comment_id):
     """
-    Display an individual comment for edit.
-
-    **Context**
-
-    ``post``
-        An instance of :model:`blog.Post`.
-    ``comment``
-        A single comment related to the post.
-    ``comment_form``
-        An instance of :form:`blog.CommentForm`
+    Handles editing of existing comments. Only allows edits by the original author.
+    Resets approval status when edited.
     """
     if request.method == "POST":
 
@@ -188,7 +212,7 @@ def comment_edit(request, slug, comment_id):
         if comment_form.is_valid() and comment.author == request.user:
             comment = comment_form.save(commit=False)
             comment.recipe = recipe
-            comment.approved = False
+            comment.approved = False  # Reset approval status on edit
             comment.save()
             messages.add_message(request, messages.SUCCESS, 'Comment Updated!')
         else:
@@ -199,16 +223,8 @@ def comment_edit(request, slug, comment_id):
 
 def comment_delete(request, slug, comment_id):
     """
-    Delete an individual comment.
-
-    **Context**
-
-    ``post``
-        An instance of :model:`blog.Post`.
-    ``comment``
-        A single comment related to the post.
+    Handles deletion of comments. Only allows deletion by the original author.
     """
-    
     comment = get_object_or_404(Comment, pk=comment_id)
 
     if comment.author == request.user:
