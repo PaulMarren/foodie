@@ -30,3 +30,9 @@
 </div>
 
 {% endblock %}
+
+<!-- JavaScript Includes -->
+{% block scripts %}
+{{ block.super }}  <!-- Include JS from base.html -->
+<script src="{% static 'js/comments.js' %}"></script>
+{% endblock %}
