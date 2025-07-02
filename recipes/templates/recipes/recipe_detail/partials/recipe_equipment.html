@@ -1,0 +1,9 @@
+<h3 class="mt-4">Equipment</h3>
+<div class="border-bottom mb-4"></div>
+<ul class="list-group list-group-flush">
+    <!-- Loop through each equipment item -->
+    {% for equipment in recipe.equipment.all %}
+    <!-- Display each piece of equipment -->
+    <li class="list-group-item">{{ equipment.name }}</li>
+    {% endfor %}
+</ul>
