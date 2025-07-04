@@ -84,7 +84,8 @@ def recipe_detail(request, slug):
         {
             "recipe": recipe,
             "comments": comments,
-            "comment_form": comment_form
+            "comment_form": comment_form,
+            "title": f"{recipe.title} - foodie",
         },
     )
 

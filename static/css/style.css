@@ -109,6 +109,11 @@ body {
     color: #fff;
 }
 
+.btn-delete {
+    background-color: #dc3545;
+    color: #fff;
+}
+
 .btn-outline-danger.remove-form {
     width: 100%;
     margin-top: 0.5rem;
