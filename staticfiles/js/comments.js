@@ -1,4 +1,3 @@
-console.log("Script loaded");
 
 const editButtons = document.getElementsByClassName("btn-edit");
 const commentText = document.getElementById("id_body");

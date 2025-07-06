@@ -50,9 +50,9 @@
                 {% if user == comment.author %}
                 <div class="btn-group">
                     <!-- Delete Button with data attributes for JS handling -->
-                    <button class="btn btn-outline-danger px-4" data-recipe_slug="{{ recipe.slug }}" data-comment_id="{{ comment.id }}">Delete</button>
+                    <button class="btn btn-outline-danger btn-delete px-4" data-recipe_slug="{{ recipe.slug }}" data-comment_id="{{ comment.id }}">Delete</button>
                     <!-- Edit Button with data attributes for JS handling -->
-                    <button class="btn btn-outline-warning px-4" data-recipe_slug="{{ recipe.slug }}" data-comment_id="{{ comment.id }}">Edit</button>
+                    <button class="btn btn-outline-warning btn-edit px-4" data-recipe_slug="{{ recipe.slug }}" data-comment_id="{{ comment.id }}">Edit</button>
                 </div>
                 {% endif %}
             </div>
