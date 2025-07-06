@@ -4,7 +4,7 @@ from .models import Recipe, Equipment, Ingredient, Instruction, Comment
 
 class RecipeForm(forms.ModelForm):
     """Form for creating and updating Recipe instances."""
-    
+
     def __init__(self, *args, **kwargs):
         """Initialize form with custom field attributes and requirements."""
         super().__init__(*args, **kwargs)
@@ -29,9 +29,11 @@ class RecipeForm(forms.ModelForm):
             'cook_time': forms.NumberInput(attrs={'min': 0}),
             'total_time': forms.NumberInput(attrs={'min': 0}),
             # Make file input for recipe image clearly required
-            'featured_image': forms.ClearableFileInput(attrs={'required': 'required'}),
+            'featured_image': forms.ClearableFileInput(
+                attrs={'required': 'required'}
+                ),
             # Display categories as checkboxes for multiple selection
-            'categories': forms.CheckboxSelectMultiple(),  
+            'categories': forms.CheckboxSelectMultiple(),
         }
 
     def clean(self):
@@ -42,24 +44,26 @@ class RecipeForm(forms.ModelForm):
         prep_time = cleaned_data.get('prep_time', 0)
         cook_time = cleaned_data.get('cook_time', 0)
         cleaned_data['total_time'] = prep_time + cook_time
-    
+
         # Validate at least one category is selected
         categories = cleaned_data.get('categories')
         if not categories:
-            self.add_error('categories', "Please select at least one category.")
-    
+            self.add_error(
+                'categories', "Please select at least one category."
+                )
+
         # Validate featured image is provided
         featured_image = cleaned_data.get('featured_image')
         if not featured_image:
             self.add_error('featured_image', "A featured image is required.")
-    
+
         return cleaned_data
 
 
 class EquipmentForm(forms.ModelForm):
     """Form for handling Equipment instances with placeholder text."""
     name = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': 'E.g., Blender, Mixing Bowl'}),
+        widget=forms.TextInput(attrs={'placeholder': 'E.g., Blender, Bowl'}),
         required=True
     )
 
@@ -80,7 +84,7 @@ class IngredientForm(forms.ModelForm):
         required=True
     )
     notes = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': 'E.g., Chopped, At room temperature'}),
+        widget=forms.TextInput(attrs={'placeholder': 'E.g., Chopped'}),
         required=False  # Notes are optional
     )
 
@@ -98,12 +102,12 @@ class InstructionForm(forms.ModelForm):
     )
     content = forms.CharField(
         widget=forms.Textarea(attrs={
-            'rows': 2, 
+            'rows': 2,
             'placeholder': 'Describe this step...'
         }),
         required=True
     )
-    
+
     class Meta:
         """Simple form configuration for Instruction model."""
         model = Instruction

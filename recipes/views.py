@@ -8,8 +8,9 @@ from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import inlineformset_factory
 from django.core.paginator import Paginator
-from .models import Recipe, Equipment, Ingredient, Instruction, Category, Comment 
-from .forms import (RecipeForm, EquipmentForm,  
+from .models import (Recipe, Equipment,
+                     Ingredient, Instruction, Category, Comment)
+from .forms import (RecipeForm, EquipmentForm,
                     IngredientForm, InstructionForm, CommentForm)
 
 
@@ -21,7 +22,8 @@ def home(request, category_slug=None):
     # Filter recipes by category if category_slug is provided
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
-        recipe_list = Recipe.objects.filter(categories=category).order_by('-created_at')
+        recipe_list = Recipe.objects.filter(
+            categories=category).order_by('-created_at')
     else:
         category = None
         recipe_list = Recipe.objects.all().order_by('-created_at')
@@ -30,7 +32,7 @@ def home(request, category_slug=None):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    all_categories = Category.objects.all() # Get all categories for sidebar navigation
+    all_categories = Category.objects.all()  # Get all categories for nav
 
     context = {
         'recipe_list': page_obj,
@@ -57,11 +59,14 @@ def recipe_detail(request, slug):
     Detailed view for a single recipe, including comments and comment form.
     Handles both displaying the recipe and processing new comments.
     """
-    recipe = get_object_or_404(Recipe, slug=slug) # Get the recipe or return 404
-    # Get approved comments + unapproved comments by the current user (if authenticated)
+    recipe = get_object_or_404(Recipe, slug=slug)  # Recipe or return 404
+    # Get approved comments
+    # + unapproved comments by the current user (if authenticated)
     comments = recipe.comments.filter(
-        Q(approved=True) | 
-        Q(approved=False, author=request.user.id if request.user.is_authenticated else None)
+        Q(approved=True) |
+        Q(approved=False,
+          author=request.user.id if request.user.is_authenticated
+          else None)
     ).order_by("-created_on")
 
     # Handle comment submission
@@ -98,41 +103,43 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
     model = Recipe
     form_class = RecipeForm
     template_name = 'recipes/recipe_form/recipe_form.html'
-    
+
     def get_formset_classes(self):
         """
-        Returns a dictionary of formset classes used in the recipe creation form.
+        Returns a dictionary of formset classes
+        used in the recipe creation form.
         """
         return {
             'equipment_formset': inlineformset_factory(
-                Recipe, Equipment, 
-                form=EquipmentForm, 
-                extra=0, 
-                can_delete=False, 
-                min_num=1, 
+                Recipe, Equipment,
+                form=EquipmentForm,
+                extra=0,
+                can_delete=False,
+                min_num=1,
                 validate_min=True
             ),
             'ingredient_formset': inlineformset_factory(
-                Recipe, Ingredient, 
-                form=IngredientForm, 
-                extra=0, 
-                can_delete=False, 
-                min_num=1, 
+                Recipe, Ingredient,
+                form=IngredientForm,
+                extra=0,
+                can_delete=False,
+                min_num=1,
                 validate_min=True
             ),
             'instruction_formset': inlineformset_factory(
-                Recipe, Instruction, 
-                form=InstructionForm, 
-                extra=0, 
-                can_delete=False, 
-                min_num=1, 
+                Recipe, Instruction,
+                form=InstructionForm,
+                extra=0,
+                can_delete=False,
+                min_num=1,
                 validate_min=True
             ),
         }
-    
+
     def get_context_data(self, **kwargs):
         """
-        Adds formsets to the template context and sets initial step numbers for instructions.
+        Adds formsets to the template context
+        and sets initial step numbers for instructions.
         """
         context = super().get_context_data(**kwargs)
         formsets = self.get_formset_classes()
@@ -145,41 +152,64 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
             if name == 'instruction_formset':
                 for i, form in enumerate(context[name]):
                     form.initial['step_number'] = i + 1
-                    
+
         return context
 
-    def form_invalid(self, form, equipment_formset=None, ingredient_formset=None, instruction_formset=None):
+    def form_invalid(
+            self, form,
+            equipment_formset=None, ingredient_formset=None,
+            instruction_formset=None):
         """
-        Handles invalid form submissions, preserving formset data for correction.
+        Handles invalid form submissions,
+        preserving formset data for correction.
         """
         context = self.get_context_data()
         context['form'] = form
-        
+
         # Use provided formsets if available, otherwise create new ones
         formsets = self.get_formset_classes()
-        context['equipment_formset'] = equipment_formset or formsets['equipment_formset'](prefix='equipment')
-        context['ingredient_formset'] = ingredient_formset or formsets['ingredient_formset'](prefix='ingredient')
-        context['instruction_formset'] = instruction_formset or formsets['instruction_formset'](prefix='instruction')
-        
+        context['equipment_formset'] = (
+            equipment_formset or
+            formsets['equipment_formset'](prefix='equipment')
+        )
+        context['ingredient_formset'] = (
+            ingredient_formset or
+            formsets['ingredient_formset'](prefix='ingredient')
+        )
+        context['instruction_formset'] = (
+            instruction_formset or
+            formsets['instruction_formset'](prefix='instruction')
+        )
+
         return self.render_to_response(context)
 
     def form_valid(self, form):
         """
-        Processes valid form submissions, saving the recipe and all related formsets.
+        Processes valid form submissions, 
+        saving the recipe and all related formsets.
         """
         form.instance.author = self.request.user
         formsets = self.get_formset_classes()
-        
+
         # Initialize all formsets with POST data and instance
-        equipment_formset = formsets['equipment_formset'](self.request.POST, instance=form.instance, prefix='equipment')
-        ingredient_formset = formsets['ingredient_formset'](self.request.POST, instance=form.instance, prefix='ingredient')
-        instruction_formset = formsets['instruction_formset'](self.request.POST, instance=form.instance, prefix='instruction')
+        equipment_formset = formsets['equipment_formset'](
+            self.request.POST,
+            instance=form.instance,
+            prefix='equipment')
+        ingredient_formset = formsets['ingredient_formset'](
+            self.request.POST,
+            instance=form.instance,
+            prefix='ingredient')
+        instruction_formset = formsets['instruction_formset'](
+            self.request.POST,
+            instance=form.instance,
+            prefix='instruction')
 
         # Validate all formsets
         if (equipment_formset.is_valid() 
             and ingredient_formset.is_valid() 
                 and instruction_formset.is_valid()):
-            
+
             self.object = form.save()
             equipment_formset.save()
             ingredient_formset.save()
@@ -193,16 +223,17 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
                 ingredient_formset=ingredient_formset,
                 instruction_formset=instruction_formset
             )
-    
+
     def get_success_url(self):
         # Redirect to the newly created recipe's detail page
         messages.success(self.request, 'Recipe created successfully!')
-        return reverse_lazy('recipe_detail', kwargs={'slug': self.object.slug})    
-        
+        return reverse_lazy('recipe_detail', kwargs={'slug': self.object.slug})
+
 
 def comment_edit(request, slug, comment_id):
     """
-    Handles editing of existing comments. Only allows edits by the original author.
+    Handles editing of existing comments. 
+    Only allows edits by the original author.
     Resets approval status when edited.
     """
     if request.method == "POST":
@@ -218,7 +249,8 @@ def comment_edit(request, slug, comment_id):
             comment.save()
             messages.add_message(request, messages.SUCCESS, 'Comment Updated!')
         else:
-            messages.add_message(request, messages.ERROR, 'Error updating comment!')
+            messages.add_message(request, messages.ERROR,
+                                 'Error updating comment!')
 
     return HttpResponseRedirect(reverse('recipe_detail', args=[slug]))
 
@@ -233,6 +265,8 @@ def comment_delete(request, slug, comment_id):
         comment.delete()
         messages.add_message(request, messages.SUCCESS, 'Comment deleted!')
     else:
-        messages.add_message(request, messages.ERROR, 'You can only delete your own comments!')
+        messages.add_message(
+            request, messages.ERROR,
+            'You can only delete your own comments!')
 
     return HttpResponseRedirect(reverse('recipe_detail', args=[slug]))

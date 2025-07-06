@@ -11,7 +11,8 @@ class UserUpdateForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email']  # Fields from Django's User model
+        fields = ['first_name', 'last_name', 'email']
+        # Fields from Django User model
         # Username is intentionally excluded as it's not changed after creation
 
 
@@ -22,4 +23,4 @@ class ProfileUpdateForm(forms.ModelForm):
     """
     class Meta:
         model = Profile
-        fields = ['bio', 'profile_image'] # Custom profile fields
+        fields = ['bio', 'profile_image']  # Custom profile fields

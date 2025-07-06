@@ -1,0 +1,308 @@
+/********** Global Styling **********/
+body {
+    background-color: #F9FAFC;
+}
+
+/********** Content Styling **********/
+
+/*Logo styling*/
+.brand {
+    font-family: Lato, sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #4A4A4F;
+}
+
+/*Background styling*/
+.main-bg {
+    background-color: #F9FAFC;
+}
+
+/*Standard card styling*/
+.card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.card-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-img-top {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+}
+
+.card-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.card-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 6em; 
+}
+
+/*Image styling*/
+.image-container {
+    height: 200px; 
+    overflow: hidden;
+}
+
+/*Author title styling*/
+.author {
+    color: white;
+    margin: 4px;
+    text-transform: uppercase;
+}
+
+/*Recipe styling*/
+.recipe-card {
+    max-width: 800px;
+    width: 100%;
+}
+
+.recipe-link {
+    text-decoration: none;
+    color: #445261;
+}
+
+.recipe-link:hover,
+.page-link {
+    color: #E84610;
+}
+
+.recipe-title {
+    margin-top: 10%;
+    margin-left: 5%;
+}
+
+.recipe-subtitle {
+    margin-left: 5%;
+    color: lightgray;
+}
+
+/*Standard Button styling*/
+.btn {
+    font-size: 1rem;
+    padding: 0.6rem;
+    border-radius: 0.375rem;
+}
+
+.btn-edit {
+    background-color: #188181;
+    color: #fff;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.btn-outline-danger.remove-form {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+/*Standard Link styling*/
+.link {
+    color: #23BBBB;
+    text-decoration: none;
+}
+
+.link:hover,
+.link:active {
+    color: #445261;
+    text-decoration: underline;
+}
+
+/* Social links styling */
+.social-links i {
+    color: gray;
+    margin-right: 10px;
+    font-size:2.5rem;
+}
+
+.social-links i:hover {
+    color: #E84610;
+}
+
+/* Formset Styling */
+.formset-block {
+    border-top: 2px solid #dee2e6;
+    padding-top: 1.5rem;
+    margin-top: 2rem;
+}
+
+.formset-block .btn-outline-secondary {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.formset-error .alert-danger {
+    border-left: 4px solid #dc3545;
+    padding: 10px 15px;
+    margin-bottom: 15px;
+}
+
+.formset-form {
+    transition: all 0.3s ease;
+    animation: fadeSlideIn 0.4s ease-in;
+    background-color: #fefefe;
+}
+
+.formset-form.hidden {
+    display: none;
+}
+
+@keyframes fadeSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Authentication pages styling */
+.auth-container {
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f9fa; 
+    padding: 2rem;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    background-color: #ffffff;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.auth-card.recipe-card {
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.auth-card h3 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.auth-card p {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.auth-card p a.link {
+    color: #198754; 
+    text-decoration: none;
+}
+
+.auth-card p a.link:hover {
+    text-decoration: underline;
+}
+
+.auth-card input[type="text"],
+.auth-card input[type="email"],
+.auth-card input[type="password"],
+.auth-card input[type="url"],
+.auth-card select,
+.auth-card textarea {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.375rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.auth-card input[type="text"]:focus,
+.auth-card input[type="email"]:focus,
+.auth-card input[type="password"]:focus,
+.auth-card input[type="url"]:focus,
+.auth-card select:focus,
+.auth-card textarea:focus {
+    border-color: #198754;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+}
+
+.auth-card .btn {
+    width: 100%;
+    padding: 0.6rem;
+    font-size: 1rem;
+}
+
+@keyframes fadeSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.auth-card {
+    animation: fadeSlideIn 0.6s ease forwards;
+}
+
+.auth-card .errorlist {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem 0;
+    color: #dc3545; 
+    font-size: 0.9rem;
+}
+
+.auth-card .errorlist li {
+    margin-bottom: 0.25rem;
+}
+
+.auth-card .btn,
+.formset-block .btn {
+    font-size: 1rem;
+    padding: 0.6rem;
+    border-radius: 0.375rem;
+}
+
+.auth-card input:focus,
+.auth-card textarea:focus,
+.auth-card select:focus {
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    border-color: #28a745;
+}

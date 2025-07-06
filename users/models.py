@@ -5,22 +5,23 @@ from cloudinary.models import CloudinaryField
 
 class Profile(models.Model):
     """
-    Extended user profile model that adds additional information to Django's built-in User model.
+    Extended user profile model that adds additional information to Django's
+    built-in User model.
     Each Profile is linked to a single User via a one-to-one relationship.
     """
-    
-    # One-to-one relationship with Django's User model - each user has exactly one profile
+
+    # One-to-one relationship with Django's User model
     user = models.OneToOneField(
-        User, 
+        User,
         on_delete=models.CASCADE  # Delete profile when user is deleted
     )
-    
+
     # Optional biographical information about the user
     bio = models.TextField(
         max_length=500,  # Limit biography length
         blank=True       # Allow empty bio
     )
-    
+
     # User profile picture hosted on Cloudinary
     profile_image = CloudinaryField(
         'image',         # Cloudinary resource type
@@ -30,5 +31,5 @@ class Profile(models.Model):
     )
 
     def __str__(self):
-        """String representation of the profile for admin interface and debugging"""
+        """String representation of the profile for admin interface"""
         return f"{self.user.username}'s Profile"

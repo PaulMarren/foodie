@@ -1,6 +1,5 @@
-// formsets.js
 
-// Add this function to validate formsets before submission
+// Validate formsets before submission
 function validateFormsets() {
     const prefixes = ["equipment", "ingredient", "instruction"];
     let isValid = true;
@@ -29,7 +28,7 @@ function validateFormsets() {
     return isValid;
 }
 
-// Add form submission handler
+// Form submission handler
 document.getElementById('recipe-form').addEventListener('submit', function(e) {
     if (!validateFormsets()) {
         e.preventDefault();

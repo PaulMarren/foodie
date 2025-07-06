@@ -1,8 +1,10 @@
 from django.contrib import admin
-from .models import Recipe, Category, Equipment, Ingredient, Instruction, Comment
+from .models import (
+    Recipe, Category, Equipment,
+    Ingredient, Instruction, Comment)
 
 
-# Inline admin classes for related models that will be edited within the Recipe admin
+# Inline admin classes for models that will be edited within the Recipe admin
 class EquipmentInline(admin.TabularInline):
     """Allows editing Equipment models inline within the Recipe admin"""
     model = Equipment  # Specifies the model to use
@@ -27,12 +29,12 @@ class CategoryAdmin(admin.ModelAdmin):
     """Admin interface configuration for the Category model"""
     # Automatically generates slug from name when creating/editing
     prepopulated_fields = {'slug': ('name',)}
-    
+
     # Fields to display in the list view
     list_display = ('name', 'slug', 'description')
-    
+
     # Fields to enable searching in the admin
-    search_fields = ('name', 'description')    
+    search_fields = ('name', 'description')
 
 
 # Recipe admin configuration
@@ -41,21 +43,21 @@ class RecipeAdmin(admin.ModelAdmin):
     """Admin interface configuration for the Recipe model"""
     # Include inline editors for related models
     inlines = [EquipmentInline, IngredientInline, InstructionInline]
-    
+
     # Automatically generates slug from title
     prepopulated_fields = {'slug': ('title',)}
-    
+
     # Fields to display in the list view
-    list_display = ('title', 'author', 'total_time', 'created_at', 
+    list_display = ('title', 'author', 'total_time', 'created_at',
                     'display_categories')
-    
+
     # Allows multiple category selection with a filter interface
     filter_horizontal = ('categories',)
 
     def display_categories(self, obj):
-        """Custom method to display all categories for a recipe as a comma-separated string"""
+        """Display all categories for a recipe as a comma-separated string"""
         return ", ".join([category.name for category in obj.categories.all()])
-    
+
     # Sets the column header name in the admin list view
     display_categories.short_description = 'Categories'
 

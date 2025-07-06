@@ -8,14 +8,15 @@ def profile(request):
     """
     Handles user profile viewing and updating.
     Combines both User model and Profile model updates.
-    
+
     GET: Displays the current user's profile information in editable forms
-    POST: Processes profile updates and saves changes to both User and Profile models
+    POST: Processes profile updates and saves changes to both User
+    and Profile models
     """
     if request.method == 'POST':
         # Initialize forms with submitted data and current user instances
         user_form = UserUpdateForm(
-            request.POST, 
+            request.POST,
             instance=request.user  # Bind to current user
         )
         profile_form = ProfileUpdateForm(
