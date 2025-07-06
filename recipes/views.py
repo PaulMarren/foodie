@@ -185,7 +185,7 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         """
-        Processes valid form submissions, 
+        Processes valid form submissions,
         saving the recipe and all related formsets.
         """
         form.instance.author = self.request.user
@@ -206,8 +206,8 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
             prefix='instruction')
 
         # Validate all formsets
-        if (equipment_formset.is_valid() 
-            and ingredient_formset.is_valid() 
+        if (equipment_formset.is_valid()
+            and ingredient_formset.is_valid()
                 and instruction_formset.is_valid()):
 
             self.object = form.save()
@@ -232,7 +232,7 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
 
 def comment_edit(request, slug, comment_id):
     """
-    Handles editing of existing comments. 
+    Handles editing of existing comments.
     Only allows edits by the original author.
     Resets approval status when edited.
     """
