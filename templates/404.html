@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Page Not Found" %}{% endblock %}
+
+{% block content %}
+
+<div class="auth-container">
+    <div class="auth-card text-center">
+        <h3>{% trans "Oops! Page Not Found" %}</h3>
+
+        <p>{% trans "Sorry, the page you're looking for doesn't exist. It might have been removed or the URL might be incorrect." %}</p>
+
+        <a href="{% url 'home' %}" class="btn btn-outline-success mt-3">{% trans "Back to Home" %}</a>
+    </div>
+</div>
+
+{% endblock %}
