@@ -1,3 +1,8 @@
+// Update remove buttons on load
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formset-block').forEach(updateRemoveButtons);
+});
+
 
 // Validate formsets before submission
 function validateFormsets() {
@@ -73,6 +78,11 @@ function addForm(prefix) {
             errorDiv.remove();
         }
     }
+
+    const formsetContainer = document.getElementById(`${prefix}-section`);
+    if (formsetContainer) {
+        updateRemoveButtons(formsetContainer);
+    }
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -90,28 +100,49 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Remove form handler
 document.addEventListener('click', function(e) {
-    if (e.target && e.target.classList.contains('remove-form')) {
+    if (e.target?.classList.contains('remove-form') && !e.target.disabled) {
         e.preventDefault();
         const form = e.target.closest('.formset-form');
-        if (form) {
-            // If this is not an empty form, mark it for deletion
-            const deleteInput = form.querySelector('input[name$="-DELETE"]');
-            if (deleteInput) {
-                deleteInput.value = 'on';
-                form.style.display = 'none';
-            } else {
-                form.remove();
-                updateStepNumbers();
-                // Update the TOTAL_FORMS count
-                const prefix = form.closest('[id$="-formset"]').id.replace('-formset', '');
-                const totalForms = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
-                if (totalForms) {
-                    totalForms.value = parseInt(totalForms.value) - 1;
-                }
-            }
+        if (!form) return;
+
+        const formsetContainer = form.closest('.formset-block');
+        if (!formsetContainer) return;
+
+        // Mark for deletion or remove
+        const deleteInput = form.querySelector('input[name$="-DELETE"]');
+        if (deleteInput) {
+            deleteInput.value = 'on';
+            form.style.display = 'none';
+        } else {
+            form.remove();
+            updateStepNumbers();
+            
         }
+
+        const totalForms = formsetContainer.querySelector('input[name$="-TOTAL_FORMS"]');
+        if (totalForms) {
+            totalForms.value = formsetContainer.querySelectorAll('.formset-form:not([style*="display: none"])').length;
+        }
+
+        // Update buttons for THIS formset only
+        updateRemoveButtons(formsetContainer);
     }
 });
+
+
+function updateRemoveButtons(formsetContainer) {
+    const visibleForms = formsetContainer.querySelectorAll('.formset-form:not([style*="display: none"])');
+    const removeButtons = formsetContainer.querySelectorAll('.remove-form');
+    
+    removeButtons.forEach(button => {
+        button.disabled = visibleForms.length <= 1;
+        // Update tooltip
+        if (button.hasAttribute('data-bs-toggle')) {
+            button.setAttribute('title', 
+                visibleForms.length <= 1 ? "You need at least one item" : "Remove this item");
+        }
+    });
+}
 
 
 function updateStepNumbers() {

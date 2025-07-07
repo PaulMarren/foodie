@@ -160,6 +160,17 @@ body {
     display: none;
 }
 
+.remove-form:disabled {
+    background-color: #e9ecef !important;
+    color: #6c757d !important;
+    border-color: #dee2e6 !important;
+    cursor: not-allowed !important;
+}
+
+.remove-form:disabled:hover {
+    background-color: #e9ecef !important;
+}
+
 @keyframes fadeSlideIn {
     0% {
         opacity: 0;
